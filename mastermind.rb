@@ -1,34 +1,31 @@
 class Board
-  def initialize(guess, clue)
-    @guess = guess
-    @clue = clue
-    puts "Your guess: #{guess}      Clue: XXXX"
-  end
 
-end
+  @@guesses = 0
 
-class Code
-
-  def initialize
-    # initializing new obj creates 4-digit code using 1-6
-    four_digit = []
-
+  def new_code
+    @four_digit_code = four_digit_code = []
     4.times do
       a = rand(1..6)
-      four_digit.push(a)
+      four_digit_code.push(a)
     end
+    @four_digit_code = four_digit_code.join
+    print @four_digit_code
+  end
 
-    four_digit = four_digit.join
-    print four_digit
+  def guesses
+    puts "\n#{@@guesses}"
+  end
 
+  def initialize
+    @@guesses += 1
+    puts 'A new game has begun!'
   end
 
 end
 
-class Guess
 
-end
+new_game = Board.new
+new_game.new_code
 
-code = Code.new
-
-# board = Board.new(code, 6543)
+new_game.guesses
+# when a new game starts we need: 4-digit code, guess, clue, how many turns

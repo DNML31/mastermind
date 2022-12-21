@@ -5,11 +5,7 @@ class Board
   @@four_digit_code = []
 
   def initialize
-    # puts "\nLet's play Mastermind!" 
-    # puts "\nGuess the 4-digit code in 12 turns."
-    # puts "A clue will be given after each turn."
-    # puts "'X' for incorrect, 'O' for correct, and 'E' for correct but wrong place."
-    # puts "\nDo you want to be the code MAKER (m) or BREAKER (b)?"
+
   end
 
   def new_code
@@ -52,36 +48,10 @@ class Board
     print result.join('')
   end
 
-  def make_or_break(x)
-    if x == 'm'
-      puts 'You are the code maker.'
-    elsif x == 'b'
-      puts 'You are the code breaker. Good luck.'
-      play_game
-    else
-      puts 'Invalid input.'
-      exit
-    end
-  end
-
-  def play_game
-
-    12.times do
-      puts "\ntake a guess...\n"
-      guess = gets.chomp
-      guess = guess.split('')
-      guess_array = guess.map(&:to_i)
-
-      # clue and guesses taken block
-      new_game.clue(new_game.secret, guess_array)
-      new_game.guesses
-    end
-
-  end
-
 end
 
 new_game = Board.new
+new_game.new_code
 
 puts "\nLet's play Mastermind!" 
 puts "\nGuess the 4-digit code in 12 turns."
@@ -90,5 +60,27 @@ puts "'X' for incorrect, 'O' for correct, and 'E' for correct but wrong place."
 puts "\nDo you want to be the code MAKER (m) or BREAKER (b)?"
 
 x = gets.chomp
-new_game.make_or_break(x)
+if x == 'm'
 
+  puts 'You are the code maker.'
+
+elsif x == 'b'
+
+  puts 'You are the code breaker. Good luck.'
+
+  12.times do
+    puts "\ntake a guess...\n"
+    guess = gets.chomp
+    guess = guess.split('')
+    guess_array = guess.map(&:to_i)
+
+    new_game.clue(new_game.secret, guess_array)
+    new_game.guesses
+  end
+
+else
+
+  puts 'Invalid input.'
+  exit
+
+end

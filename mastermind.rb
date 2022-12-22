@@ -33,7 +33,7 @@ class Board
       puts 'CORRECT! You win!'
       exit
     end
-    # this loop only checks if number is in the correct spot
+    
     for i in 0..3
       if code[i] == guess[i]
         result.push('O')
@@ -47,18 +47,19 @@ class Board
   end
 
   def cpu_solve(user_code)
-    puts 'CPU guessing...'
-    print user_code
+    guesses = 12
+    guesses -= 1
+    puts "\nCPU guessing..."
 
     cpu_guess = []
     4.times do
       a = rand(1..6)
       cpu_guess.push(a.to_i)
     end
-    print cpu_guess
+    puts "\nCPU guessed #{cpu_guess}."
 
     result = []
-
+    
     for i in 0..3
       if user_code[i] == cpu_guess[i]
         result.push('O')
@@ -67,14 +68,12 @@ class Board
       else
         result.push('X')
       end
-      # this is printing 10 characters (wtf?)
-    end
-    print result
 
-    # 12 times loop
-    # cpu takes guess
-    # decrement @@guesses
-    # give CPU a clue
+    end
+    print result.join('') # CPU's clue
+
+    
+
 
   end
 
@@ -83,21 +82,23 @@ end
 new_game = Board.new
 new_game.new_code
 
-puts "\nLet's play Mastermind!" 
+puts "\nLet's play Mastermind!"
 puts "\nGuess the 4-digit code in 12 turns."
 puts 'A clue will be given after each turn.'
 puts "'X' for incorrect, 'O' for correct, and 'E' for correct but wrong place."
 puts "\nDo you want to be the code MAKER (m) or BREAKER (b)?"
 
+# decides whether user is breaker, maker or exits
 x = gets.chomp
 if x == 'm'
 
-  puts 'You are the code maker.'
-  puts 'Enter a 4-digit code using the numbers 1-6 for the CPU to break...'
+  puts "\nYou are the code maker."
+  puts "\nEnter a 4-digit code using the numbers 1-6 for the CPU to break..."
 
   y = gets.chomp
   y = y.split('')
   user_code = y.map(&:to_i)
+  puts "\nYour 4-digit code is #{user_code}."
 
   new_game.cpu_solve(user_code)
 

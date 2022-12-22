@@ -1,12 +1,10 @@
 class Board
-
+  # include Solve
   attr_accessor :guesses
   @@guesses = 12
   @@four_digit_code = []
 
-  def initialize
-
-  end
+  def initialize ; end
 
   def new_code
     four_digit_code = []
@@ -25,19 +23,19 @@ class Board
     puts "\n#{@@guesses} guesses left."
   end
 
-  def clue(x, y)
+  def solve(code, guess)
     @@guesses -= 1
     result = []
 
     if @@guesses == 0
       puts 'You lose.'
-    elsif x == y
+    elsif code == guess
       puts 'CORRECT! You win!'
       exit
     end
     # this loop only checks if number is in the correct spot
     for i in 0..3
-      if x[i] == y[i]
+      if code[i] == guess[i]
         result.push('O')
       elsif x.include?(y[i])
         result.push('E')
@@ -46,6 +44,37 @@ class Board
       end
     end
     print result.join('')
+  end
+
+  def cpu_solve(user_code)
+    puts 'CPU guessing...'
+    print user_code
+
+    cpu_guess = []
+    4.times do
+      a = rand(1..6)
+      cpu_guess.push(a.to_i)
+    end
+    print cpu_guess
+
+    result = []
+    for i in 0..3
+      if user_code[i] == cpu_guess[i]
+        result.push('O')
+      elsif user_code.include?(cpu_guess[i])
+        result.push('E')
+      else
+        result.push('X')
+      end
+      # this is printing 10 characters (wtf?)
+      print result.join('')
+    end
+
+    # 12 times loop
+    # cpu takes guess
+    # decrement @@guesses
+    # give CPU a clue
+
   end
 
 end
@@ -63,6 +92,13 @@ x = gets.chomp
 if x == 'm'
 
   puts 'You are the code maker.'
+  puts 'Enter a 4-digit code using the numbers 1-6 for the CPU to break...'
+
+  y = gets.chomp
+  y = y.split('')
+  user_code = y.map(&:to_i)
+
+  new_game.cpu_solve(user_code)
 
 elsif x == 'b'
 
@@ -74,7 +110,7 @@ elsif x == 'b'
     guess = guess.split('')
     guess_array = guess.map(&:to_i)
 
-    new_game.clue(new_game.secret, guess_array)
+    new_game.solve(new_game.secret, guess_array)
     new_game.guesses
   end
 

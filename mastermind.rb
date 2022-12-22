@@ -58,6 +58,7 @@ class Board
     print cpu_guess
 
     result = []
+
     for i in 0..3
       if user_code[i] == cpu_guess[i]
         result.push('O')
@@ -67,8 +68,8 @@ class Board
         result.push('X')
       end
       # this is printing 10 characters (wtf?)
-      print result.join('')
     end
+    print result
 
     # 12 times loop
     # cpu takes guess

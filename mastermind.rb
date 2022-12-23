@@ -25,7 +25,7 @@ class Board
 
   def solve(code, guess)
     @@guesses -= 1
-    result = []
+    clue = []
 
     if @@guesses == 0
       puts 'You lose.'
@@ -36,19 +36,18 @@ class Board
     
     for i in 0..3
       if code[i] == guess[i]
-        result.push('O')
-      elsif x.include?(y[i])
-        result.push('E')
+        clue.push('O')
+      elsif code.include?(guess[i])
+        clue.push('E')
       else
-        result.push('X')
+        clue.push('X')
       end
     end
-    print result.join('')
+    print clue.join('')
   end
 
   def cpu_solve(user_code)
-    guesses = 12
-    guesses -= 1
+    guesses = 11
     puts "\nCPU guessing..."
 
     cpu_guess = []
@@ -58,23 +57,39 @@ class Board
     end
     puts "\nCPU guessed #{cpu_guess}."
 
-    result = []
-    
+    clue = []
+
     for i in 0..3
       if user_code[i] == cpu_guess[i]
-        result.push('O')
+        clue.push('O')
       elsif user_code.include?(cpu_guess[i])
-        result.push('E')
+        clue.push('E')
       else
-        result.push('X')
+        clue.push('X')
       end
-
     end
-    print result.join('') # CPU's clue
 
-    
+    print clue.join('') # CPU's clue
 
+    bank = [1, 2, 3, 4, 5, 6]
+    e_bank = []
+    next_guess = []
 
+    for i in 0..3
+      if clue[i] == 'X'
+        bank.delete(cpu_guess[i])
+      elsif clue[i] == 'O'
+        next_guess[i] = cpu_guess[i]
+      elsif clue[i] == 'E'
+        e_bank.push(cpu_guess[i])
+        next_guess.push('E')
+      end
+    end
+    print "\n#{bank}  <-- bank"
+    print "\n#{next_guess}  <-- CPU next guess"
+    print "\n #{e_bank.uniq}   <-- e_bank"
+  #   print next_guess.join('')
+  #   guesses -= 1
   end
 
 end

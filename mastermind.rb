@@ -1,5 +1,4 @@
 class Board
-  # include Solve
   attr_accessor :guesses
   @@guesses = 12
   @@four_digit_code = []
@@ -47,7 +46,7 @@ class Board
   end
 
   def cpu_solve(user_code)
-    guesses = 11
+    guesses = 12
     puts "\nCPU guessing..."
 
     cpu_guess = []
@@ -69,27 +68,43 @@ class Board
       end
     end
 
-    print clue.join('') # CPU's clue
+    guesses -= 1
 
     bank = [1, 2, 3, 4, 5, 6]
     e_bank = []
-    next_guess = []
+    pre_guess = []
 
     for i in 0..3
       if clue[i] == 'X'
         bank.delete(cpu_guess[i])
+        pre_guess.push('X')
       elsif clue[i] == 'O'
-        next_guess[i] = cpu_guess[i]
+        pre_guess[i] = cpu_guess[i]
       elsif clue[i] == 'E'
         e_bank.push(cpu_guess[i])
-        next_guess.push('E')
+        pre_guess.push('E')
       end
     end
-    print "\n#{bank}  <-- bank"
-    print "\n#{next_guess}  <-- CPU next guess"
-    print "\n #{e_bank.uniq}   <-- e_bank"
-  #   print next_guess.join('')
-  #   guesses -= 1
+    print "\n#{pre_guess}  <-- CPU pre guess"
+    print "\n\n#{bank}  <-- bank"
+    print "\n#{e_bank.uniq}   <-- e_bank"
+
+    # where to loop? - until guesses = 0 or next_guess == user_code
+
+    # should this block be (for i in 0..3) also?
+    next_guess = []
+    pre_guess.map do |element|
+      if element == Integer
+        next_guess.push(element)
+      elsif element == 'E'
+        next_guess.push(e_bank.sample)
+      elsif element == 'X'
+        next_guess.push((bank - e_bank).sample)
+      end
+    end
+    print "\n\n#{next_guess}  <-- next_guess"
+    ###
+
   end
 
 end
@@ -113,7 +128,6 @@ if x == 'm'
   y = gets.chomp
   y = y.split('')
   user_code = y.map(&:to_i)
-  puts "\nYour 4-digit code is #{user_code}."
 
   new_game.cpu_solve(user_code)
 

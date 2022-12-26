@@ -87,19 +87,22 @@ class Board
     end
     print "\n#{pre_guess}  <-- CPU pre guess"
     print "\n\n#{bank}  <-- bank"
-    print "\n#{e_bank.uniq}   <-- e_bank"
-
+    print "\n\n#{e_bank.uniq}   <-- e_bank"
+    
     # where to loop? - until guesses = 0 or next_guess == user_code
 
     # should this block be (for i in 0..3) also?
     next_guess = []
-    pre_guess.map do |element|
-      if element == Integer
-        next_guess.push(element)
-      elsif element == 'E'
+    # pre_guess.map do |element|
+    for i in 0..3
+      if pre_guess[i].is_a? Integer
+        next_guess.push(pre_guess[i])
+      elsif pre_guess[i] == 'E'
         next_guess.push(e_bank.sample)
-      elsif element == 'X'
+      elsif pre_guess[i] == 'X'
         next_guess.push((bank - e_bank).sample)
+      else
+        next
       end
     end
     print "\n\n#{next_guess}  <-- next_guess"
@@ -113,12 +116,14 @@ new_game = Board.new
 new_game.new_code
 
 puts "\nLet's play Mastermind!"
-puts "\nGuess the 4-digit code in 12 turns."
-puts 'A clue will be given after each turn.'
-puts "'X' for incorrect, 'O' for correct, and 'E' for correct but wrong place."
+puts "\n* Using the numbers 1-6, a 4-digit code will be MADE."
+puts '* BREAK the 4-digit code in 12 turns.'
+puts "* A clue will be given for each digit's place after each turn:"
+puts "\t'X' for an incorrect number."
+puts "\t'O' for a correct number."
+puts "\t'E' for correct number but in the wrong place."
 puts "\nDo you want to be the code MAKER (m) or BREAKER (b)?"
 
-# decides whether user is breaker, maker or exits
 x = gets.chomp
 if x == 'm'
 

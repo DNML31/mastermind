@@ -54,7 +54,10 @@ class Board
       a = rand(1..6)
       cpu_guess.push(a.to_i)
     end
-    puts "\nCPU guessed #{cpu_guess}."
+
+    guesses -= 1
+
+    puts "\nCPU guessed #{cpu_guess}. #{guesses} guesses left."
 
     clue = []
 
@@ -67,8 +70,6 @@ class Board
         clue.push('X')
       end
     end
-
-    guesses -= 1
 
     bank = [1, 2, 3, 4, 5, 6]
     e_bank = []
@@ -88,25 +89,37 @@ class Board
     print "\n#{pre_guess}  <-- CPU pre guess"
     print "\n\n#{bank}  <-- bank"
     print "\n\n#{e_bank.uniq}   <-- e_bank"
-    
-    # where to loop? - until guesses = 0 or next_guess == user_code
 
-    # should this block be (for i in 0..3) also?
     next_guess = []
-    # pre_guess.map do |element|
-    for i in 0..3
-      if pre_guess[i].is_a? Integer
-        next_guess.push(pre_guess[i])
-      elsif pre_guess[i] == 'E'
-        next_guess.push(e_bank.sample)
-      elsif pre_guess[i] == 'X'
-        next_guess.push((bank - e_bank).sample)
-      else
-        next
+
+    until (next_guess == user_code || guesses == 0) do
+
+      next_guess.clear
+
+      for i in 0..3
+        if pre_guess[i].is_a? Integer
+          next_guess.push(pre_guess[i])
+        elsif pre_guess[i] == 'E'
+          next_guess.push(e_bank.sample)
+        elsif pre_guess[i] == 'X'
+          next_guess.push((bank - e_bank).sample)
+        else
+          next
+        end
+      end
+      guesses -= 1
+      print "\n\n#{next_guess}  <-- next_guess  #{guesses} guesses left"
+
+      print pre_guess
+      # clues aren't changing
+      # numbers are always guessed if correct in the first guess
+      # X's never change to another clue if correct or almost correct
+
+      if next_guess == user_code
+        puts "CPU got it"
       end
     end
-    print "\n\n#{next_guess}  <-- next_guess"
-    ###
+
 
   end
 

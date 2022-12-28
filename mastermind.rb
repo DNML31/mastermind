@@ -49,77 +49,59 @@ class Board
     guesses = 12
     puts "\nCPU guessing..."
 
-    cpu_guess = []
+    guess = []
     4.times do
       a = rand(1..6)
-      cpu_guess.push(a.to_i)
+      guess.push(a.to_i)
     end
 
-    guesses -= 1
+    if guess == user_code
+      puts "CPU broke your code."
+      exit
+    else 
+      until (guess == user_code || guesses == 0) do
+        if guess == user_code
+          puts "CPU broke your code."
+          exit
+        elsif guess != user_code
 
-    puts "\nCPU guessed #{cpu_guess}. #{guesses} guesses left."
+          guesses -= 1
 
-    clue = []
+          clue = []
+          for i in 0..3
+            if user_code[i] == guess[i]
+              clue.push(guess[i])
+            elsif user_code.include?(guess[i])
+              clue.push('E')
+            elsif !user_code.include?(guess[i])
+              clue.push('X')
+            end
+          end
 
-    for i in 0..3
-      if user_code[i] == cpu_guess[i]
-        clue.push('O')
-      elsif user_code.include?(cpu_guess[i])
-        clue.push('E')
-      else
-        clue.push('X')
-      end
-    end
+          bank = [1, 2, 3, 4, 5, 6]
+          e_bank = []
 
-    bank = [1, 2, 3, 4, 5, 6]
-    e_bank = []
-    pre_guess = []
+          for i in 0..3
+            if clue[i] == 'X'
+              bank.delete(guess[i])
+              guess.push(bank.sample)
+            elsif clue[i].is_a? Integer
+              guess.push(guess[i])
+            elsif clue[i] == 'E'
+              e_bank.push(guess[i])
+              e_bank.uniq
+              guess.push((e_bank + bank).sample)
+            end
+          end
+          guess.slice!(0..3)
 
-    for i in 0..3
-      if clue[i] == 'X'
-        bank.delete(cpu_guess[i])
-        pre_guess.push('X')
-      elsif clue[i] == 'O'
-        pre_guess[i] = cpu_guess[i]
-      elsif clue[i] == 'E'
-        e_bank.push(cpu_guess[i])
-        pre_guess.push('E')
-      end
-    end
-    print "\n#{pre_guess}  <-- CPU pre guess"
-    print "\n\n#{bank}  <-- bank"
-    print "\n\n#{e_bank.uniq}   <-- e_bank"
+          print "\n\nCPU guessed #{guess}. #{guesses} guesses left."
 
-    next_guess = []
-
-    until (next_guess == user_code || guesses == 0) do
-
-      next_guess.clear
-
-      for i in 0..3
-        if pre_guess[i].is_a? Integer
-          next_guess.push(pre_guess[i])
-        elsif pre_guess[i] == 'E'
-          next_guess.push(e_bank.sample)
-        elsif pre_guess[i] == 'X'
-          next_guess.push((bank - e_bank).sample)
-        else
-          next
+        elsif guesses == 0
+          puts "CPU couldn't break your code."
         end
       end
-      guesses -= 1
-      print "\n\n#{next_guess}  <-- next_guess  #{guesses} guesses left"
-
-      print pre_guess
-      # clues aren't changing
-      # numbers are always guessed if correct in the first guess
-      # X's never change to another clue if correct or almost correct
-
-      if next_guess == user_code
-        puts "CPU got it"
-      end
     end
-
 
   end
 

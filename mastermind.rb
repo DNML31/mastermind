@@ -32,7 +32,7 @@ class Board
       puts 'CORRECT! You win!'
       exit
     end
-    
+
     for i in 0..3
       if code[i] == guess[i]
         clue.push('O')
@@ -58,7 +58,7 @@ class Board
     if guess == user_code
       puts "CPU broke your code."
       exit
-    else 
+    else
       until (guess == user_code || guesses == 0) do
         if guess == user_code
           puts "CPU broke your code."
@@ -95,12 +95,17 @@ class Board
           end
           guess.slice!(0..3)
 
-          print "\n\nCPU guessed #{guess}. #{guesses} guesses left."
+          print "\nCPU guessed #{guess}. #{guesses} guesses left."
 
-        elsif guesses == 0
-          puts "CPU couldn't break your code."
         end
       end
+
+    end
+
+    if guesses == 0 
+      puts "\nCPU couldn't break your code."
+    elsif guess == user_code
+      puts "\nCPU broke your code."
     end
 
   end
